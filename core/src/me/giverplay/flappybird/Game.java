@@ -7,9 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Game extends ApplicationAdapter {
 
+  private static final int BIRDS = 3;
+
   private SpriteBatch batch;
-  private Texture bird;
   private Texture background;
+  private Texture[] birds;
+
+  private float birdIndex;
 
   private float width;
   private float height;
@@ -20,15 +24,29 @@ public class Game extends ApplicationAdapter {
     height = Gdx.graphics.getHeight();
 
     batch = new SpriteBatch();
-    bird = new Texture("passaro1.png");
     background = new Texture("fundo.png");
+
+    birds = new Texture[BIRDS];
+
+    for (int index = 0; index < BIRDS; index++) {
+      birds[index] = new Texture("passaro" + (index + 1) + ".png");
+    }
+
+    birdIndex = 0;
   }
 
   @Override
   public void render() {
     batch.begin();
     batch.draw(background, 0.0f, 0.0f, width, height);
-    batch.draw(bird, 100f, 100f);
+
+    birdIndex += Gdx.graphics.getDeltaTime() * 10;
+
+    if(birdIndex > BIRDS) {
+      birdIndex = 0;
+    }
+
+    batch.draw(birds[(int) birdIndex], 100f, height / 2);
     batch.end();
   }
 
