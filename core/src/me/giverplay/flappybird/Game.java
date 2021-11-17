@@ -13,7 +13,9 @@ public class Game extends ApplicationAdapter {
   private Texture background;
   private Texture[] birds;
 
-  private float birdIndex;
+  private float birdY;
+  private float birdSpriteIndex;
+  private float gravity;
 
   private float width;
   private float height;
@@ -32,7 +34,9 @@ public class Game extends ApplicationAdapter {
       birds[index] = new Texture("passaro" + (index + 1) + ".png");
     }
 
-    birdIndex = 0;
+    birdSpriteIndex = 0;
+    gravity = 0;
+    birdY = height / 2;
   }
 
   @Override
@@ -40,13 +44,27 @@ public class Game extends ApplicationAdapter {
     batch.begin();
     batch.draw(background, 0.0f, 0.0f, width, height);
 
-    birdIndex += Gdx.graphics.getDeltaTime() * 10;
-
-    if(birdIndex > BIRDS) {
-      birdIndex = 0;
+    if(Gdx.input.justTouched()) {
+      gravity = -12;
     }
 
-    batch.draw(birds[(int) birdIndex], 100f, height / 2);
+    gravity += 0.7;
+
+    if(birdY >= 0) {
+      birdY -= gravity;
+    }
+
+    if(birdY < 0){
+      birdY = 0;
+    }
+
+    birdSpriteIndex += Gdx.graphics.getDeltaTime() * 10;
+
+    if(birdSpriteIndex > BIRDS) {
+      birdSpriteIndex = 0;
+    }
+
+    batch.draw(birds[(int) birdSpriteIndex], 100f, birdY);
     batch.end();
   }
 
