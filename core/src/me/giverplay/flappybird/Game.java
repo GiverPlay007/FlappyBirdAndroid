@@ -22,10 +22,30 @@ public class Game extends ApplicationAdapter {
 
   @Override
   public void create() {
+    initializeGraphics();
+    initializeTextures();
+    initializeObjects();
+  }
+
+  @Override
+  public void render() {
+    update();
+    draw();
+  }
+
+  @Override
+  public void dispose() {
+    batch.dispose();
+  }
+
+  private void initializeGraphics() {
     width = Gdx.graphics.getWidth();
     height = Gdx.graphics.getHeight();
 
     batch = new SpriteBatch();
+  }
+
+  private void initializeTextures() {
     background = new Texture("fundo.png");
 
     birds = new Texture[BIRDS];
@@ -35,15 +55,14 @@ public class Game extends ApplicationAdapter {
     }
 
     birdSpriteIndex = 0;
+  }
+
+  private void initializeObjects() {
     gravity = 0;
     birdY = height / 2;
   }
 
-  @Override
-  public void render() {
-    batch.begin();
-    batch.draw(background, 0.0f, 0.0f, width, height);
-
+  private void update() {
     if(Gdx.input.justTouched()) {
       gravity = -12;
     }
@@ -63,13 +82,12 @@ public class Game extends ApplicationAdapter {
     if(birdSpriteIndex > BIRDS) {
       birdSpriteIndex = 0;
     }
-
-    batch.draw(birds[(int) birdSpriteIndex], 100f, birdY);
-    batch.end();
   }
 
-  @Override
-  public void dispose() {
-    batch.dispose();
+  private void draw() {
+    batch.begin();
+    batch.draw(background, 0.0f, 0.0f, width, height);
+    batch.draw(birds[(int) birdSpriteIndex], 100f, birdY);
+    batch.end();
   }
 }
