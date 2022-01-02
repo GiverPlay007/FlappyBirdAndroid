@@ -10,15 +10,19 @@ public class Game extends ApplicationAdapter {
   private static final int BIRDS = 3;
 
   private SpriteBatch batch;
-  private Texture background;
   private Texture[] birds;
+  private Texture background;
+  private Texture pipeTop;
+  private Texture pipeDown;
 
   private float birdY;
   private float birdSpriteIndex;
   private float gravity;
 
-  private float width;
-  private float height;
+  private int width;
+  private int height;
+
+  private int maxHeight;
 
   @Override
   public void create() {
@@ -47,6 +51,8 @@ public class Game extends ApplicationAdapter {
 
   private void initializeTextures() {
     background = new Texture("fundo.png");
+    pipeTop = new Texture("cano_topo_maior.png");
+    pipeDown = new Texture("cano_baixo_maior.png");
 
     birds = new Texture[BIRDS];
 
@@ -59,7 +65,8 @@ public class Game extends ApplicationAdapter {
 
   private void initializeObjects() {
     gravity = 0;
-    birdY = height / 2;
+    birdY = height / 2f;
+    maxHeight = height - birds[0].getHeight();
   }
 
   private void update() {
@@ -75,6 +82,11 @@ public class Game extends ApplicationAdapter {
 
     if(birdY < 0){
       birdY = 0;
+    }
+
+    if(birdY > maxHeight) {
+      birdY = maxHeight;
+      gravity += 6;
     }
 
     birdSpriteIndex += Gdx.graphics.getDeltaTime() * 10;
